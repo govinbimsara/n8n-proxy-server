@@ -20,7 +20,9 @@ const redis = new Redis(process.env.UPSTASH_REDIS_URL);
 const SESSION_TTL_SECONDS = parseInt(process.env.SESSION_TTL_MINUTES) * 60;
 
 app.post('/api/chat', async (req, res) => {
-  const { userId, message } = req.body;
+  // Handle both direct body and n8n wrapped body format
+  const body = req.body.body || req.body;
+  const { userId, message } = body;
   console.log('📨 Received request:', { userId, message: message?.substring(0, 50) });
 
   try {
